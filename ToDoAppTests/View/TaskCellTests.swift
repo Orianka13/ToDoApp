@@ -81,11 +81,37 @@ class TaskCellTests: XCTestCase {
     
     //проверим что метод configure устанавливает location в нашу ячейку
     func testConfigureSetsLocation() {
-        
-        let task = Task(title: "Foo")
+        let location = Location(name: "Bar")
+        let task = Task(title: "Foo", location: location)
         self.cell.configure(withTask: task)
         
         XCTAssertEqual(self.cell.locationLabel.text, task.location?.name)
+    }
+    
+    func configureCellWithDoneTask() {
+        let task = Task(title: "Foo")
+        self.cell.configure(withTask: task, done: true)
+    }
+    
+    //проверим что выполненные задачи зачеркнуты
+    func testDoneTaskShouldStrikeTrough() {
+        self.configureCellWithDoneTask()
+
+        let attributedString = NSAttributedString(string: "Foo", attributes: [NSAttributedString.Key.strikethroughStyle : NSUnderlineStyle.single.rawValue])
+        XCTAssertEqual(self.cell.titleLabel.attributedText, attributedString)
+    }
+    //проверим что у выполненных задач дата скрыта
+    func testDoneTaskDateLabelEqualsNil() {
+        self.configureCellWithDoneTask()
+        
+        XCTAssertNil(self.cell.dateLabel)
+    }
+    
+    //проверим что у выполненных задач локация скрыта
+    func testDoneTaskLocationLabelEqualsNil() {
+        self.configureCellWithDoneTask()
+        
+        XCTAssertNil(self.cell.locationLabel)
     }
 }
 
