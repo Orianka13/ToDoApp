@@ -46,6 +46,47 @@ class TaskCellTests: XCTestCase {
     func testCellHasLocationLableInContentView() {
         XCTAssertTrue(self.cell.locationLabel.isDescendant(of: self.cell.contentView))
     }
+    
+    //проверим есть и у ячейки ярлык dateLabel
+    func testCellHasDateLable() {
+        XCTAssertNotNil(self.cell.dateLabel)
+    }
+    
+    //проверим действительно ли DateLabel находится внутри вью
+    func testCellHasDateLableInContentView() {
+        XCTAssertTrue(self.cell.dateLabel.isDescendant(of: self.cell.contentView))
+    }
+    
+    //проверим что метод configure устанавливает заголовок в нашу ячейку
+    func testConfigureSetsTitle() {
+        
+        let task = Task(title: "Foo")
+        self.cell.configure(withTask: task)
+        
+        XCTAssertEqual(self.cell.titleLabel.text, task.title)
+    }
+    
+    //проверим что метод configure устанавливает дату в нашу ячейку
+    func testConfigureSetsDate() {
+        let task = Task(title: "Foo")
+        self.cell.configure(withTask: task)
+        
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yy" // http://nsdateformatter.com
+        let date = task.date
+        let dateString = df.string(from: date!)
+        
+        XCTAssertEqual(self.cell.dateLabel.text, dateString)
+    }
+    
+    //проверим что метод configure устанавливает location в нашу ячейку
+    func testConfigureSetsLocation() {
+        
+        let task = Task(title: "Foo")
+        self.cell.configure(withTask: task)
+        
+        XCTAssertEqual(self.cell.locationLabel.text, task.location?.name)
+    }
 }
 
 extension TaskCellTests {

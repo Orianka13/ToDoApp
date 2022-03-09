@@ -11,6 +11,7 @@ class TaskCell: UITableViewCell {
  
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,5 +22,15 @@ class TaskCell: UITableViewCell {
     }
     
     func configure(withTask task: Task) {
+        self.titleLabel.text = task.title
+        
+        let df = DateFormatter()
+        df.dateFormat = "dd.MM.yy"
+        
+        if let date = task.date {
+            self.dateLabel.text = df.string(from: date)
+        }
+        
+        self.locationLabel.text = task.location?.name
     }
 }
