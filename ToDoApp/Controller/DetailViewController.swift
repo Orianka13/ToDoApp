@@ -30,10 +30,18 @@ class DetailViewController: UIViewController {
         self.titleLabel.text = self.task.title
         self.descriptionLabel.text = self.task.description
         
-        if let date = task.date {
+        if let date = self.task.date {
             self.dateLabel.text = self.dateFormatter.string(from: date)
         }
         
         self.locationLabel.text = self.task.location?.name
+        
+        if let coordinate = self.task.location?.coordinate {
+            let region = MKCoordinateRegion(center: coordinate,
+                                            latitudinalMeters: 100,
+                                            longitudinalMeters: 100)
+            self.mapView.region = region
+            
+        }
     }
 }

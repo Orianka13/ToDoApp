@@ -86,12 +86,8 @@ class DetailViewControllerTests: XCTestCase {
     func testSettingTaskSetsDateLabel() {
         
         self.setupTaskAndAppearanceTransition()
-        let df = DateFormatter()
-        df.dateFormat = "dd.MM.yy"
-        if let date = self.task.date {
-            let stringDate = df.string(from: date)
-            XCTAssertEqual(self.controller.dateLabel.text, stringDate)
-        }
+        XCTAssertEqual(self.controller.dateLabel.text, "10.03.22")
+        
     }
     
     func testSettingTaskSetsLocationNameLabel(){
@@ -99,5 +95,13 @@ class DetailViewControllerTests: XCTestCase {
         self.setupTaskAndAppearanceTransition()
         XCTAssertEqual(self.controller.locationLabel.text, "Baz")
     }
+    
+    func testSettingTaskSetsMapView(){
+        
+        self.setupTaskAndAppearanceTransition()
+        XCTAssertEqual(self.controller.mapView.centerCoordinate.latitude, 59.88304167, accuracy: 0.001)
+        XCTAssertEqual(self.controller.mapView.centerCoordinate.longitude, 30.38266797, accuracy: 0.001)
+    }
+    
     
 }
