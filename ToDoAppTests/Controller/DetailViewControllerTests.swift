@@ -12,7 +12,6 @@ import CoreLocation
 class DetailViewControllerTests: XCTestCase {
     
     var controller: DetailViewController!
-    var task: Task!
     
     override func setUpWithError() throws {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -62,8 +61,8 @@ class DetailViewControllerTests: XCTestCase {
         let coordinate = CLLocationCoordinate2D(latitude: 59.88304167, longitude: 30.38266797)
         let location = Location(name: "Baz", coordinate: coordinate)
         let date = Date(timeIntervalSince1970: 1646895570)
-        self.task = Task(title: "Foo", description: "Bar", date: date, location: location)
-        self.controller.task = self.task
+        let task = Task(title: "Foo", description: "Bar", date: date, location: location)
+        self.controller.task = task
         
         self.controller.beginAppearanceTransition(true, animated: true) //имитируем viewWillAppear
         self.controller.endAppearanceTransition() // viewDidAppear
