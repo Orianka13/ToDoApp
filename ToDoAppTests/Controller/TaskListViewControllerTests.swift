@@ -54,15 +54,13 @@ class TaskListViewControllerTests: XCTestCase {
         XCTAssertEqual(target as? TaskListViewController, self.sut)
     }
     
-    //проверим что по тапу на кнопку Добавить открывается новый контроллер
-    func testAddNewTaskPresentsNewTaskVC() {
-        
+    func setNewTaskVC() -> NewTaskViewController {
         XCTAssertNil(self.sut?.presentedViewController)//проверим что при срабатывании данного метода не открывается ни кской другой контроллер
         guard
             let newTaskButton = self.sut?.navigationItem.rightBarButtonItem,
             let action = newTaskButton.action else {
                 XCTFail()
-                return
+                return NewTaskViewController()
             }
         UIApplication.shared.keyWindow?.rootViewController = self.sut
         
@@ -71,6 +69,24 @@ class TaskListViewControllerTests: XCTestCase {
         XCTAssertTrue(self.sut?.presentedViewController is NewTaskViewController)
         
         let newTaskVC = self.sut?.presentedViewController as! NewTaskViewController
+        
+        return newTaskVC
+    }
+    
+    //проверим что по тапу на кнопку Добавить открывается новый контроллер
+    func testAddNewTaskPresentsNewTaskVC() {
+        
+        let newTaskVC = setNewTaskVC()
+        
         XCTAssertNotNil(newTaskVC.titleTextField)
+    }
+    
+    //проверим что у датаПровайдера и NewTaskVC один таск менеджер
+    func testSharesSameTaskManagerWithNewTaskVC() {
+        
+        let newTaskVC = setNewTaskVC()
+        
+        XCTAssertNotNil(self.sut?.dataProvider.taskManager)
+        XCTAssertTrue(newTaskVC.taskManager === self.sut?.dataProvider.taskManager)
     }
 }
