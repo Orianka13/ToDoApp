@@ -47,4 +47,30 @@ class TaskListViewControllerTests: XCTestCase {
         XCTAssertEqual(self.sut?.tableView.delegate as? DataProvider,
                        self.sut?.tableView.dataSource as? DataProvider)
     }
+    
+    //проверим что есть кнопка добавить задачу
+    func testTaskListVCHasAddBarButtonWithSelfAsTarget() {
+        let target = self.sut?.navigationItem.rightBarButtonItem?.target
+        XCTAssertEqual(target as? TaskListViewController, self.sut)
+    }
+    
+    //проверим что по тапу на кнопку Добавить открывается новый контроллер
+    func testAddNewTaskPresentsNewTaskVC() {
+        
+        XCTAssertNil(self.sut?.presentedViewController)//проверим что при срабатывании данного метода не открывается ни кской другой контроллер
+        guard
+            let newTaskButton = self.sut?.navigationItem.rightBarButtonItem,
+            let action = newTaskButton.action else {
+                XCTFail()
+                return
+            }
+        UIApplication.shared.keyWindow?.rootViewController = self.sut
+        
+        self.sut?.performSelector(onMainThread: action, with: newTaskButton, waitUntilDone: true)
+        XCTAssertNotNil(self.sut?.presentedViewController)
+        XCTAssertTrue(self.sut?.presentedViewController is NewTaskViewController)
+        
+        let newTaskVC = self.sut?.presentedViewController as! NewTaskViewController
+        XCTAssertNotNil(newTaskVC.titleTextField)
+    }
 }
