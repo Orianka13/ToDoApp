@@ -13,6 +13,7 @@ class TaskListViewControllerTests: XCTestCase {
     private var sut: TaskListViewController?
     
     override func setUpWithError() throws {
+        super.setUp()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
         let vc = storyboard.instantiateViewController(withIdentifier: String(describing: TaskListViewController.self))
@@ -55,18 +56,14 @@ class TaskListViewControllerTests: XCTestCase {
     }
     
     func setNewTaskVC() -> NewTaskViewController {
-        XCTAssertNil(self.sut?.presentedViewController)//проверим что при срабатывании данного метода не открывается ни кской другой контроллер
         guard
             let newTaskButton = self.sut?.navigationItem.rightBarButtonItem,
             let action = newTaskButton.action else {
-                XCTFail()
                 return NewTaskViewController()
             }
         UIApplication.shared.keyWindow?.rootViewController = self.sut
         
         self.sut?.performSelector(onMainThread: action, with: newTaskButton, waitUntilDone: true)
-        XCTAssertNotNil(self.sut?.presentedViewController)
-        XCTAssertTrue(self.sut?.presentedViewController is NewTaskViewController)
         
         let newTaskVC = self.sut?.presentedViewController as! NewTaskViewController
         
@@ -88,5 +85,25 @@ class TaskListViewControllerTests: XCTestCase {
         
         XCTAssertNotNil(self.sut?.dataProvider.taskManager)
         XCTAssertTrue(newTaskVC.taskManager === self.sut?.dataProvider.taskManager)
+    }
+    
+    //когда появляется вью перегружаем tableView
+    func testWhenViewAppearedTableViewReloaded() {
+        let mockTableView = MockTableView()
+        self.sut?.tableView = mockTableView
+        
+        self.sut?.beginAppearanceTransition(true, animated: true)
+        self.sut?.endAppearanceTransition()
+        
+        XCTAssertTrue((self.sut?.tableView as! MockTableView).isReloaded)
+    }
+}
+
+extension TaskListViewControllerTests {
+    class MockTableView: UITableView {
+        var isReloaded = false
+        override func reloadData() {
+            self.isReloaded = true
+        }
     }
 }

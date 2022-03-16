@@ -15,6 +15,7 @@ class NewTaskViewControllerTests: XCTestCase {
     var placemark: MockCLPlacemark!
     
     override func setUpWithError() throws {
+        super.setUp()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.controller = storyboard.instantiateViewController(withIdentifier: String(describing: NewTaskViewController.self)) as? NewTaskViewController
         
@@ -110,6 +111,31 @@ class NewTaskViewControllerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5, handler: nil)//добавляем ожилание ответа 5 секунд
     }
+    
+    //проверим что при тапе на save закрывается контроллер
+    func testSaveDismissesNewTaskVC() {
+        //для проверки был ли вызван метод или нет используем мок
+        //given
+        let mockNewTaskVC = MockNewTaskVC()
+        mockNewTaskVC.titleTextField = UITextField()
+        mockNewTaskVC.titleTextField.text = "Foo"
+        mockNewTaskVC.descriptionTF = UITextField()
+        mockNewTaskVC.descriptionTF.text = "Bar"
+        mockNewTaskVC.locationTF = UITextField()
+        mockNewTaskVC.locationTF.text = "Baz"
+        mockNewTaskVC.addressTF = UITextField()
+        mockNewTaskVC.addressTF.text = "Санкт-Петербург"
+        mockNewTaskVC.dateTF = UITextField()
+        mockNewTaskVC.dateTF.text = "10.03.22"
+        
+        //when
+        mockNewTaskVC.save()
+        
+        //then
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            XCTAssertTrue(mockNewTaskVC.isDismissed)
+        }
+    }
 }
 
 extension NewTaskViewControllerTests {
@@ -131,5 +157,14 @@ extension NewTaskViewControllerTests {
             return CLLocation(latitude: self.mockCoordinate.latitude, longitude: self.mockCoordinate.longitude)
         }
         
+    }
+}
+
+extension NewTaskViewControllerTests {
+    class MockNewTaskVC: NewTaskViewController {
+        var isDismissed = false
+        override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+            self.isDismissed = true
+        }
     }
 }

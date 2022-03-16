@@ -13,6 +13,7 @@ class TaskCellTests: XCTestCase {
     var cell: TaskCell!
     
     override func setUpWithError() throws {
+        super.setUp()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: String(describing: TaskListViewController.self)) as! TaskListViewController
         controller.loadViewIfNeeded()
@@ -116,7 +117,6 @@ class TaskCellTests: XCTestCase {
 }
 
 extension TaskCellTests {
-    //для ячейки создаем фейковую dataSource
     class FakeDataSource: NSObject, UITableViewDataSource {
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return 1
