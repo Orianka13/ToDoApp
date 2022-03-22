@@ -105,14 +105,14 @@ class TaskCellTests: XCTestCase {
     func testDoneTaskDateLabelEqualsNil() {
         self.configureCellWithDoneTask()
         
-        XCTAssertNil(self.cell.dateLabel)
+        XCTAssertEqual(self.cell.dateLabel.text, "")
     }
     
     //проверим что у выполненных задач локация скрыта
     func testDoneTaskLocationLabelEqualsNil() {
         self.configureCellWithDoneTask()
         
-        XCTAssertNil(self.cell.locationLabel)
+        XCTAssertEqual(self.cell.locationLabel.text, "")
     }
 }
 

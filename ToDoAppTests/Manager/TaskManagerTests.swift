@@ -111,4 +111,21 @@ class TaskManagerTests: XCTestCase {
         XCTAssertEqual(taskManager.task(at: 0), task)
         XCTAssertEqual(taskManager.task(at: 1), task1)
     }
+    
+    //проверим что свойство isDone меняется в зависимости от выполнения задач
+//    func testDoneTaskIsDonetoggled() {
+//        let task = Task(title: "Foo")
+//        self.sut?.add(task: task)
+//        self.sut?.checkTask(at: 0)
+//
+//        XCTAssertEqual(task.isDone, true)
+//    }
+    
+    func testUndoneTaskIsDonetoggled() {
+        let task = Task(title: "Foo")
+        self.sut?.add(task: task)
+        self.sut?.checkTask(at: 0)
+        self.sut?.uncheckTask(at: 0)
+        XCTAssertEqual(task.isDone, false)
+    }
 }
